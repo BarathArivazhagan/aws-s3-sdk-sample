@@ -55,13 +55,7 @@ class AWSS3Configuration{
 		BasicAWSCredentials basicAWSCredentials=new BasicAWSCredentials(accessKey,accessSecret);
 		return  basicAWSCredentials;
 	}
-
-	@PostConstruct
-	public void init(){
-
-		//System.out.println("ACCESS ID "+amazonS3.getS3AccountOwner().getId());
-
-	}
+	
 
 	@Bean
 	@InboundChannelAdapter(value = "s3Channel", poller = @Poller(fixedDelay = "100"))

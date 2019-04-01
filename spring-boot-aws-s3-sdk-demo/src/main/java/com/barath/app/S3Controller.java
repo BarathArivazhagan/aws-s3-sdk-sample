@@ -11,7 +11,9 @@ import javax.validation.constraints.NotNull;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +29,9 @@ public class S3Controller {
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	private final AWSS3Service s3Service; 
 	
+	@Value("${java.io.tmpdir}")
+	private String tempLocation;
+	
 	
 	public S3Controller(AWSS3Service s3Service) {
 		super();
@@ -35,11 +40,15 @@ public class S3Controller {
 	
 	@PostMapping("/upload")
 	public String uploadObject(@RequestBody @Valid @NotNull MultipartFile inputFile) throws IllegalStateException, IOException {
+
+		logger.info("Uploading file to S3 with file name {}",inputFile.getOriginalFilename());
+		File file = new File(tempLocation.concat(inputFile.getOriginalFilename()));
 		
-		logger.info(" uploading file to S3 with file name {}",inputFile.getOriginalFilename());
-		File file = new File( inputFile.getOriginalFilename());
+		if(!file.exists()) {
+			file.createNewFile();
+		}		
 		inputFile.transferTo(file);
-		return s3Service.postObject(file) ? "file uploaded to s3 successfully": "upload failed";		
+		return s3Service.postObject(file) ? "File uploaded to s3 successfully": "Upload failed";		
 
 	}
 	
@@ -49,6 +58,13 @@ public class S3Controller {
 				.stream()
 				.map(Bucket::getName)
 				.collect(Collectors.toList());
+	}
+	
+	@GetMapping("/bucket/{bucketName}/keys")
+	public List<String> keysByBucket(@PathVariable String bucketName){
+		
+		logger.info("Get the list of keys by bucket name {}", bucketName);
+		return this.s3Service.getObjects(bucketName);
 	}
 
 }

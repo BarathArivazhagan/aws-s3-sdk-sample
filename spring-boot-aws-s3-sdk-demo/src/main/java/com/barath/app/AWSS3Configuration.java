@@ -18,7 +18,7 @@ public class AWSS3Configuration {
 	
 		
 	@Bean
-	public AWSCredentials awsCredentials(@Value("{aws.accessKey}") String accessKey, @Value("{aws.secretKey}") String secretKey) {
+	public AWSCredentials awsCredentials(@Value("${aws.accessKey}") String accessKey, @Value("${aws.secretKey}") String secretKey) {
 		return new BasicAWSCredentials(accessKey, secretKey);
 	}
 	

@@ -11,6 +11,8 @@ public interface S3Operations {
 	
 	boolean deleteObject(String bucketName,File file);
 	
+	List<String> getObjects(String bucketName);
+	
 	List<Bucket> listBuckets();
 	
 

@@ -1,13 +1,8 @@
 package com.barath.app;
 
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import java.io.InputStream;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.annotation.InboundChannelAdapter;
@@ -28,21 +23,12 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.PollableChannel;
 import org.springframework.scheduling.support.PeriodicTrigger;
 
-import javax.annotation.PostConstruct;
-import java.io.InputStream;
-
-@SpringBootApplication
-public class AwsS3ProcessorApplication {
-
-	public static void main(String[] args) {
-
-		
-		SpringApplication.run(AwsS3ProcessorApplication.class, args);
-	}
-}
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 
 @Configuration
-class AWSS3Configuration{
+public class AWSS3Configuration{
 
 	@Value("${aws.accessKeyId}")
 	private String accessKey;

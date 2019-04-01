@@ -1,0 +1,27 @@
+{"properties": [
+  {
+    "name": "aws.secretKey",
+    "type": "java.lang.String",
+    "description": "A description for 'aws.secretKey'"
+  },
+  {
+    "name": "aws.bucketName",
+    "type": "java.lang.String",
+    "description": "A description for 'aws.bucketName'"
+  },
+  {
+    "name": "aws.accessKey",
+    "type": "java.lang.String",
+    "description": "A description for 'aws.accessKey'"
+  },
+  {
+    "name": "aws.region",
+    "type": "java.lang.String",
+    "description": "A description for 'aws.region'"
+  },
+  {
+    "name": "aws.bucketName",
+    "type": "java.lang.String",
+    "description": "A description for 'aws.bucketName'"
+  }
+]}

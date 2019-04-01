@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-
 import org.springframework.integration.aws.support.S3Session;
 import org.springframework.integration.file.remote.AbstractFileInfo;
 import org.springframework.integration.file.remote.AbstractRemoteFileStreamingMessageSource;
@@ -21,8 +20,8 @@ public class S3StreamingMessageSource extends AbstractRemoteFileStreamingMessage
 
     public S3StreamingMessageSource(RemoteFileTemplate<S3ObjectSummary> template,
                                     Comparator<AbstractFileInfo<S3ObjectSummary>> comparator) {
-
-        super(template, comparator);
+    		super(template, null);
+        
     }
 
     @Override
@@ -48,5 +47,11 @@ public class S3StreamingMessageSource extends AbstractRemoteFileStreamingMessage
         }
         return file;
     }
+
+	@Override
+	protected boolean isDirectory(S3ObjectSummary file) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

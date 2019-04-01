@@ -64,6 +64,12 @@ public class AWSS3Service implements S3Operations {
 		this.amazonS3.deleteObject(bucketName, key);
 	}
 
+	public void deleteObject(String key) {
+		
+		logger.info("Deleteing the object with bucketname {} and key {}",bucketName,key);
+		this.amazonS3.deleteObject(bucketName, key);
+	}
+
 	@Override
 	public List<String> getObjects(String bucketName) {
 		
@@ -83,6 +89,11 @@ public class AWSS3Service implements S3Operations {
 		
 		return results;
 	}
+	
+
+	public List<String> getObjects() {		
+		return this.getObjects(bucketName);
+	}
 
 	@Override
 	public Object getObject(String bucketName, String key) {
@@ -91,6 +102,11 @@ public class AWSS3Service implements S3Operations {
 		S3Object s3Object=	this.amazonS3.getObject(bucketName, key);
 		logger.info("Got object ",s3Object.getKey());
 		return s3Object;
+	}
+	
+
+	public Object getObject(String key) {
+		return this.getObject(bucketName, key);
 	}
 	
 	

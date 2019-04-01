@@ -5,6 +5,7 @@ import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.PutObjectResult;
+import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 @Service
@@ -35,28 +37,31 @@ public class AWSS3Service implements S3Operations {
 	}
 
 	@Override
-	public boolean postObject(String bucketName, File file) {
+	public Object postObject(String bucketName, File file) {
 		
 	  PutObjectResult result = this.amazonS3.putObject(bucketName, file.getName(), file);
 	  logger.info("Put object result for file {} with version {}",file.getName(), Objects.toString(result.getVersionId()));
-	  return result.getVersionId() !=null ? true: false;
+	  return result;
 	}
 	
-	public boolean postObject(File file) {
+	public Object postObject(File file) {
 		return postObject(bucketName, file);		
 	}
 
 	@Override
-	public List<Bucket> listBuckets() {
+	public List<String> listBuckets() {
 		
 		logger.info("Listing bucket names ");
-		return this.amazonS3.listBuckets();
+		return this.amazonS3.listBuckets()
+				.stream()
+				.map(Bucket::getName).collect(Collectors.toList());
 	}
 
 	@Override
-	public boolean deleteObject(String bucketName, File file) {
+	public void deleteObject(String bucketName, String key) {
 		
-		return false;
+		logger.info("Deleteing the object with bucketname {} and key {}",bucketName,key);
+		this.amazonS3.deleteObject(bucketName, key);
 	}
 
 	@Override
@@ -77,6 +82,15 @@ public class AWSS3Service implements S3Operations {
 		}
 		
 		return results;
+	}
+
+	@Override
+	public Object getObject(String bucketName, String key) {
+		
+		logger.info("Get object from bucket {} with key {}",bucketName,key);
+		S3Object s3Object=	this.amazonS3.getObject(bucketName, key);
+		logger.info("Got object ",s3Object.getKey());
+		return s3Object;
 	}
 	
 	

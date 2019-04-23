@@ -2,11 +2,13 @@ package com.barath.app;
 
 import java.io.File;
 import java.lang.invoke.MethodHandles;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.amazonaws.HttpMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -107,6 +109,17 @@ public class AWSS3Service implements S3Operations {
 
 	public Object getObject(String key) {
 		return this.getObject(bucketName, key);
+	}
+
+	public String generatePresignedUrl(String bucketName, String objectKey) {
+
+		java.util.Date expiration = new java.util.Date();
+		long msec = expiration.getTime();
+		msec += 1000 * 60 * 15; // 15 Minutes
+		expiration.setTime(msec);
+
+		URL url = this.amazonS3.generatePresignedUrl(bucketName,objectKey,expiration, HttpMethod.GET);
+		return url != null ? Objects.toString(url): "No presigned url generated";
 	}
 	
 	

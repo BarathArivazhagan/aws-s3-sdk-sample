@@ -15,6 +15,8 @@ public interface S3Operations {
 	Object getObject(String bucketName,String key);
 	
 	List<String> listBuckets();
+
+	String generatePresignedUrl(String bucketName, String key);
 	
 
 }
